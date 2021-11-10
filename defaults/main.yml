@@ -1,19 +1,13 @@
 ---
 # defaults file for pki
 
-ca_cn: jinteki.lan
-
-  #intermediate_templates: ["TLS-server", "TLS-client", "TLS-client_server", "identity", "encryption"]
-
+ca_cn: "my ca"
 ca_base_dir: /etc/ssl/ca
-
 ca_crlnumber: "crlnumber"
 ca_serial: "serial"
 ca_database: "db"
-
 ca_file_basename: "ca-{{ ansible_hostname }}"
 ca_key_password: "test"
-
 ca_cps: "http://my.policy.uri"
 ca_cps_explicit: "some explicit test for policy"
 ca_cps_organization: "my org"

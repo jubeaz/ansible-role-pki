@@ -21,17 +21,17 @@
     _root_ca_name: "{{ __root_ca_file.files[0].path | basename }}"
 
 - name: copy root ca certificate on archlinux hosts
-  copy: 
+  copy:
     src: "{{ _pki_transfert_d['_root_crt_d']['path'] }}/{{ _root_ca_name }}"
     dest: "/etc/ca-certificates/trust-source/anchors"
     owner: root
     group: root
     mode: 0644
   when: ansible_distribution == 'Archlinux'
-  notify:  Trust root ca Archlinux
+  notify: Trust root ca Archlinux
 
 - name: copy root ca certificate on ubuntu hosts
-  copy: 
+  copy:
     src: "{{ _pki_transfert_d['_root_crt_d']['path'] }}/{{ _root_ca_name }}"
     dest: "/usr/local/share/ca-certificates/{{ _root_ca_name | splitext |first }}.crt"
     owner: root
@@ -39,4 +39,3 @@
     mode: 0644
   when: ansible_distribution == 'Ubuntu'
   notify: Trust root ca Ubuntu
-# https://wiki.archlinux.org/title/User:Grawity/Adding_a_trusted_CA_certificate#System-wide_%E2%80%93_Arch,_Fedora_(p11-kit)

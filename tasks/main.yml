@@ -43,4 +43,3 @@
   when: inventory_hostname in groups['intermediate_ca']
 
 - include_tasks: all-set-trust.yml
-

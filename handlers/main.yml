@@ -7,6 +7,6 @@
 
 - name: Trust root ca Ubuntu
   command:
-    argv: 
+    argv:
       - update-ca-certificates
       - --fresh
