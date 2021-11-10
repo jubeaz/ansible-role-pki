@@ -1,0 +1,22 @@
+---
+- name: Check if intermediate certificate file
+  stat:
+    path: "{{ _pki_transfert_d['_crt_d']['path'] }}/{{ _ca_cert_name }}"
+  register: __ca_cert_file
+  delegate_to: localhost
+
+- name: Copy cert on ca
+  copy:
+    src: "{{ _pki_transfert_d['_crt_d']['path'] }}/{{ _ca_cert_name }}"
+    dest: "{{ _ca_dirs['_ca_certs'].path }}/{{ _ca_cert_name }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: __ca_cert_file.stat.exists
+
+- name: Delete certs in transfert_dir
+  file:
+    path: "{{ _pki_transfert_d['_crt_d']['path'] }}/{{ _ca_cert_name }}"
+    state: absent
+  delegate_to: localhost
+  when: __ca_cert_file.stat.exists

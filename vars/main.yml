@@ -1,0 +1,78 @@
+---
+# vars file for pki
+
+_ca_cert_name: "{{ ca_file_basename }}.{{ _ca_cert_ext }}"
+_ca_key_name: "{{ ca_file_basename }}.{{ _ca_key_ext }}"
+_ca_crl_name: "{{ ca_file_basename }}.crl.{{ _ca_cert_ext }}"
+_ca_csr_name: "{{ ca_file_basename }}.{{ _ca_csr_ext }}"
+
+_pki_transfert_dir: /tmp/pki
+
+_pki_transfert_d:
+  _base_d:
+    path: "_pki_transfert_dir"
+    mode: "0755"
+  _csr_d:
+    path: "{{ _pki_transfert_dir }}/csr"
+    mode: "0755"
+  _crt_d:
+    path: "{{ _pki_transfert_dir }}/crt"
+    mode: "0755"
+  _root_crt_d:
+    path: "{{ _pki_transfert_dir }}/root_crt"
+    mode: "0755"
+
+_pki_templates: ["TLS-server", "TLS-client", "TLS-client_server", "identity", "encryption"]
+
+_ca_key_ext: "key"
+_ca_cert_ext: "pem"
+_ca_csr_ext: "csr"  # to move as internal variables
+
+_root_ca_name: ""
+csr_list: []
+
+ca_certs_dir: "certs"
+ca_cnf_dir: "configs"
+ca_cnf_req_dir: "req"
+ca_cnf_ca_dir: "ca"
+ca_new_certs_dir: "new-certs"
+ca_crl_dir: "crl"
+ca_private_dir: "private"
+ca_csr_dir: "csr"
+ca_signed_csr_dir: "{{ ca_csr_dir }}-signed"
+ca_rejected_csr_dir: "{{ ca_csr_dir }}-rejected"
+
+_ca_dirs:
+  _ca_base:
+    path: "{{ ca_base_dir }}"
+    mode: "0755"
+  _ca_cnf:
+    path: "{{ ca_base_dir }}/{{ ca_cnf_dir }}"
+    mode: "0755"
+  _ca_cnf_req:
+    path: "{{ ca_base_dir }}/{{ ca_cnf_dir }}/{{ ca_cnf_req_dir }}"
+    mode: "0755"
+  _ca_cnf_ca:
+    path: "{{ ca_base_dir }}/{{ ca_cnf_dir }}/{{ ca_cnf_ca_dir }}"
+    mode: "0755"
+  _ca_certs:
+    path: "{{ ca_base_dir }}/{{ ca_certs_dir }}"
+    mode: "0755"
+  _ca_new_certs:
+    path: "{{ ca_base_dir }}/{{ ca_new_certs_dir }}"
+    mode: "0755"
+  _ca_crl:
+    path: "{{ ca_base_dir }}/{{ ca_crl_dir }}"
+    mode: "0755"
+  _ca_private:
+    path: "{{ ca_base_dir }}/{{ ca_private_dir }}"
+    mode: "0700"
+  _ca_csr:
+    path: "{{ ca_base_dir }}/{{ ca_csr_dir }}"
+    mode: "0777"
+  _ca_signed_csr:
+    path: "{{ ca_base_dir }}/{{ ca_signed_csr_dir }}"
+    mode: "0755"
+  _ca_rejected_csr:
+    path: "{{ ca_base_dir }}/{{ ca_rejected_csr_dir }}"
+    mode: "0755"

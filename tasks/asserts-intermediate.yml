@@ -1,0 +1,8 @@
+---
+- name: Assert supported templates
+  assert:
+    that:
+      - item.key in  _pki_templates
+    quiet: true
+  with_dict: "{{ ca_templates }}"
+  when: inventory_hostname in groups['intermediate_ca']

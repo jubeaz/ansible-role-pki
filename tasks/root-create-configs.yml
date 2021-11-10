@@ -1,0 +1,32 @@
+---
+- name: Create openssl-base.cnf
+  template:
+    src: templates/openssl-base.cnf.j2
+    dest: "{{ _ca_dirs['_ca_cnf'].path }}/openssl-base.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create ca-self.cnf
+  template:
+    src: templates/ca-self.cnf.j2
+    dest: "{{ _ca_dirs['_ca_cnf'].path }}/ca-self.cnf"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create ca-intermediate.cnf
+  template:
+    src: templates/ca-intermediate.cnf.j2
+    dest: "{{ _ca_dirs['_ca_cnf'].path }}/ca-intermediate.cnf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create crl.cnf
+  template:
+    src: templates/crl.cnf.j2
+    dest: "{{ _ca_dirs['_ca_cnf'].path }}/crl.cnf"
+    owner: root
+    group: root
+    mode: 0644

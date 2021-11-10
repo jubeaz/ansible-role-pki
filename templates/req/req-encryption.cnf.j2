@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+{% set template = ca_templates_params[ca_templates['encryption']] %}
+[ req ]
+default_bits            = {{ template['default_bits'] }}
+encrypt_key             = yes
+default_md              = {{ template['default_md'] }}
+utf8                    = yes
+string_mask             = utf8only
+prompt                  = yes
+distinguished_name      = client_dn
+req_extensions          = client_reqext
+
+[ encryption_dn ]
+commonName              = "6. Common Name              (eg, full name)"
+commonName_max          = 64
+emailAddress            = "7. Email Address            (eg, name@fqdn)"
+emailAddress_max        = 40
+
+[ encryption_reqext ]
+subjectAltName          = email:move

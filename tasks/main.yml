@@ -1,0 +1,46 @@
+---
+# tasks file for pki
+- name: assert proper distribution
+  assert:
+    that:
+      - ansible_distribution in ['Ubuntu', 'Archlinux']
+    quiet: true
+
+- include_tasks: asserts.yml
+  when: inventory_hostname in groups['pki']
+
+- include_tasks: asserts-root.yml
+  when: inventory_hostname in groups['root_ca']
+
+- include_tasks: asserts-intermediate.yml
+  when: inventory_hostname in groups['intermediate_ca']
+
+- include_tasks: ubuntu.yml
+  when: (ansible_distribution == "Ubuntu") and (inventory_hostname in groups['pki'])
+
+- include_tasks: arch.yml
+  when: (ansible_distribution == "Archlinux") and (inventory_hostname in groups['pki'])
+
+- include_tasks: create-structure.yml
+  when: inventory_hostname in groups['pki']
+
+- include_tasks: root-create-configs.yml
+  when: inventory_hostname in groups['root_ca']
+
+- include_tasks: intermediate-create-configs.yml
+  when: inventory_hostname in groups['intermediate_ca']
+
+- include_tasks: root-create-cert.yml
+  when: inventory_hostname in groups['root_ca']
+
+- include_tasks: intermediate-create-csr.yml
+  when: inventory_hostname in groups['intermediate_ca']
+
+- include_tasks: root-sign-csr.yml
+  when: inventory_hostname in groups['root_ca']
+
+- include_tasks: intermediate-get-cert.yml
+  when: inventory_hostname in groups['intermediate_ca']
+
+- include_tasks: all-set-trust.yml
+

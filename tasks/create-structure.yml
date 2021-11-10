@@ -1,0 +1,83 @@
+---
+- name: Create transfert directories
+  file:
+    path: "{{ item.value['path'] }}"
+    owner: root
+    group: root
+    mode: "{{ item.value['mode'] }}"
+    state: directory
+  with_dict: "{{ _pki_transfert_d }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Create ca directories
+  file:
+    path: "{{ item.value['path'] }}"
+    owner: root
+    group: root
+    mode: "{{ item.value['mode'] }}"
+    state: directory
+  with_dict: "{{ _ca_dirs }}"
+
+
+- name: Check ca_database
+  stat:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_database }}"
+  register: __ca_database
+
+- name: Create ca_database
+  file:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_database }}"
+    owner: root
+    group: root
+    mode: 0644
+    state: touch
+  when: not __ca_database.stat.exists
+
+- name: Check ca_serial
+  stat:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_serial }}"
+  register: __ca_serial
+
+- name: Create ca_serial
+  file:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_serial }}"
+    owner: root
+    group: root
+    mode: 0644
+    state: touch
+  when: not __ca_serial.stat.exists
+
+- name: Set initial ca_serial
+  lineinfile:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_serial }}"
+    owner: root
+    group: root
+    mode: 0644
+    regexp: '^1000'
+    line: '1000'
+  when: not __ca_serial.stat.exists
+
+- name: Check ca_crlnumber
+  stat:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_crlnumber }}"
+  register: __ca_crlnumber
+
+- name: Create ca_crlnumber
+  file:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_crlnumber }}"
+    owner: root
+    group: root
+    mode: 0644
+    state: touch
+  when: not __ca_crlnumber.stat.exists
+
+- name: Set initial ca_crlnumber
+  lineinfile:
+    path: "{{ _ca_dirs['_ca_base'].path }}/{{ ca_crlnumber }}"
+    owner: root
+    group: root
+    mode: 0644
+    regexp: '^1000'
+    line: '1000'
+  when: not __ca_crlnumber.stat.exists
