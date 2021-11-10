@@ -1,7 +1,6 @@
 ---
 # defaults file for pki
 
-ca_cn: "my ca"
 ca_base_dir: /etc/ssl/ca
 ca_crlnumber: "crlnumber"
 ca_serial: "serial"
@@ -30,4 +29,8 @@ ca_templates_params: {
       OrganizationUnitName: match
     }
   }
+}
+ca_dn: {
+  CN: xxx,
+  OU=: yyy
 }
