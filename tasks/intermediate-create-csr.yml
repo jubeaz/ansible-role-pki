@@ -13,15 +13,24 @@
       - "{{ _ca_dirs['_ca_cnf'].path }}/req-intermediate.cnf"
       - -new
       - -out
-      - "{{ _ca_dirs['_ca_private'].path }}/{{ _ca_csr_name }}"
+      - "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
   when: not __ca_cert_file.stat.exists
 
-- name: Get csr on controller node
-  fetch:
-    src: "{{ _ca_dirs['_ca_private'].path }}/{{ _ca_csr_name }}"
-    dest: "{{ _pki_transfert_d['_csr_d']['path'] }}/"
-    owner: root
-    group: root
-    mode: 0644
-    flat: true
-  when: not __ca_cert_file.stat.exists
+- name: test
+  debug:
+    msg: "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
+  delegate_to: "{{ __ca_root_ca_name }}"
+
+- name: test
+  debug:
+    msg: "{{ _ca_dirs['_ca_csr'].path }}"
+  delegate_to: "{{ __ca_root_ca_name }}"
+
+- name: Copy csr on root ca
+  become: false
+  ansible.posix.synchronize:
+    src: "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
+    dest: "{{ __ca_root_base_dir }}/{{ ca_csr_dir }}"
+    use_ssh_args: true
+    mode: pull
+  delegate_to: "{{ __ca_root_ca_name }}"

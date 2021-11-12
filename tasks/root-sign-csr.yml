@@ -1,30 +1,13 @@
 ---
 - name: List all the csr to sign
   find:
-    path: "{{ _pki_transfert_d['_csr_d']['path'] }}"
+    path: "{{ _ca_dirs['_ca_csr']['path'] }}"
     pattern: "*.{{ _ca_csr_ext }}"
   register: __csr_list
-  delegate_to: localhost
 
 - name: Set csr_list
   set_fact:
     csr_list: "{{ csr_list }} + [ '{{ item.path | basename }}']"
-  with_items: "{{ __csr_list.files }}"
-
-- name: Copy csrs to root ca
-  copy:
-    src: "{{ item.path }}"
-    dest: "{{ _ca_dirs['_ca_csr'].path }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_items: "{{ __csr_list.files }}"
-
-- name: Delete csrs in transfert_dir
-  file:
-    path: "{{ item.path }}"
-    state: absent
-  delegate_to: localhost
   with_items: "{{ __csr_list.files }}"
 
 - name: Sign csrs

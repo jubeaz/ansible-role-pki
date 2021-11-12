@@ -1,15 +1,4 @@
 ---
-- name: Create transfert directories
-  file:
-    path: "{{ item.value['path'] }}"
-    owner: root
-    group: root
-    mode: "{{ item.value['mode'] }}"
-    state: directory
-  with_dict: "{{ _pki_transfert_d }}"
-  delegate_to: localhost
-  run_once: true
-
 - name: Create ca directories
   file:
     path: "{{ item.value['path'] }}"

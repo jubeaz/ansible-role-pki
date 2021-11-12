@@ -1,0 +1,9 @@
+- name: Set root ca inventory name for intermediate ca
+  set_fact:
+    __ca_root_ca_name: "{{ groups['root_ca'][0] }}"
+  when: inventory_hostname in groups['intermediate_ca']
+
+- name: Set root ca  csr_dir for intermediate ca
+  set_fact:
+    __ca_root_base_dir: "{{ hostvars[__ca_root_ca_name]['ca_base_dir'] }}"
+  when: inventory_hostname in groups['intermediate_ca']

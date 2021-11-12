@@ -12,11 +12,14 @@
 - include_tasks: asserts-root.yml
   when: inventory_hostname in groups['root_ca']
 
+- include_tasks: set_vars.yml
+  when: inventory_hostname in groups['pki']
+
 - include_tasks: asserts-intermediate.yml
   when: inventory_hostname in groups['intermediate_ca']
 
-- include_tasks: ubuntu.yml
-  when: (ansible_distribution == "Ubuntu") and (inventory_hostname in groups['pki'])
+    #- include_tasks: ubuntu.yml
+    # when: (ansible_distribution == "Ubuntu") and (inventory_hostname in groups['pki'])
 
 - include_tasks: arch.yml
   when: (ansible_distribution == "Archlinux") and (inventory_hostname in groups['pki'])
@@ -41,5 +44,3 @@
 
 - include_tasks: intermediate-get-cert.yml
   when: inventory_hostname in groups['intermediate_ca']
-
-- include_tasks: all-set-trust.yml
