@@ -42,10 +42,3 @@
     path: "{{ _ca_dirs['_ca_csr'].path }}/{{ item }}"
     state: absent
   with_items: "{{ csr_list }}"
-
-- name: Get certs on controller node
-  fetch:
-    src: "{{ _ca_dirs['_ca_new_certs'].path }}/{{ item | splitext | first }}.{{ _ca_cert_ext }}"
-    dest: "{{ _pki_transfert_d['_crt_d']['path'] }}/"
-    flat: true
-  with_items: "{{ csr_list }}"
