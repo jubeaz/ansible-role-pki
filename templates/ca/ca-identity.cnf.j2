@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 
-.include {{ ca_base_dir }}/openssl-base.cnf
+.include {{ ca_base_dir }}/{{ ca_cnf_dir }}/openssl-base.cnf
 {% set template = ca_templates_params[ca_templates['identity']] %}
 
 [ ca ]
