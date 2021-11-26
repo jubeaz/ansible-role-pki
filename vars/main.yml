@@ -15,17 +15,6 @@ _ca_csr_ext: "csr"  # to move as internal variables
 _root_ca_name: ""
 csr_list: []
 
-ca_certs_dir: "certs"
-ca_cnf_dir: "configs"
-ca_cnf_req_dir: "req"
-ca_cnf_ca_dir: "ca"
-ca_new_certs_dir: "new-certs"
-ca_crl_dir: "crl"
-ca_private_dir: "private"
-ca_csr_dir: "csr"
-ca_signed_csr_dir: "{{ ca_csr_dir }}-signed"
-ca_rejected_csr_dir: "{{ ca_csr_dir }}-rejected"
-
 _ca_dirs:
   _ca_base:
     path: "{{ ca_base_dir }}"

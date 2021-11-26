@@ -1,17 +1,17 @@
 ---
 - name: Assert groups
   assert:
-    that: ( 'root_ca' in group_names ) or ( 'intermediate_ca' in group_names)
+    that: ( pki_root_group in group_names ) or ( pki_intermediate_group in group_names)
     quiet: true
 
 - name: Assert groups
   assert:
-    that: not (( 'root_ca' in group_names ) and ( 'intermediate_ca' in group_names))
+    that: not (( pki_root_group in group_names ) and ( pki_intermediate_group in group_names))
     quiet: true
 
 - name: Assert only one root
   assert:
-    that: (groups['root_ca'] | length) == 1
+    that: (groups[pki_root_group] | length) == 1
     quiet: true
 
 - name: assert proper distribution
