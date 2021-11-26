@@ -16,16 +16,6 @@
       - "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
   when: not __ca_cert_file.stat.exists
 
-- name: test
-  debug:
-    msg: "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
-  delegate_to: "{{ __ca_root_ca_name }}"
-
-- name: test
-  debug:
-    msg: "{{ _ca_dirs['_ca_csr'].path }}"
-  delegate_to: "{{ __ca_root_ca_name }}"
-
 - name: Copy csr on root ca
   become: false
   ansible.posix.synchronize:
@@ -34,3 +24,9 @@
     use_ssh_args: true
     mode: pull
   delegate_to: "{{ __ca_root_ca_name }}"
+
+- name: Delete csr
+  file:
+    path: "{{ _ca_dirs['_ca_csr'].path }}/{{ _ca_csr_name }}"
+    state: absent
+
