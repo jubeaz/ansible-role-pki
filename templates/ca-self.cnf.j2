@@ -24,7 +24,7 @@ preserve                    = no
 
 [ req ]
 
-output_password             = {{ ca_root_cert_info['password'] }}
+output_password             = "{{ ca_root_cert_info['password'] }}"
 encrypt_key                 = yes
 default_bits                = {{ ca_root_cert_info['default_bits'] }} 
 default_md                  = {{ ca_root_cert_info['default_md'] }}

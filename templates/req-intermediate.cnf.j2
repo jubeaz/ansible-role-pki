@@ -2,7 +2,7 @@
 .include {{ _ca_dirs['_ca_cnf'].path }}/openssl-base.cnf
 
 [ req ]
-output_password             = test
+output_password             = "{{ ca_key_password }}"
 encrypt_key                 = yes
 default_keyfile             = $b_private_key
 
