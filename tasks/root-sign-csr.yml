@@ -17,7 +17,7 @@
       - ca
       - -batch
       - -passin
-      - pass:test
+      - "pass:{{ ca_root_cert_info['password'] }}"
       - -config
       - "{{ _ca_dirs['_ca_cnf'].path }}/ca-intermediate.cnf"
       - -in
@@ -26,6 +26,18 @@
       - "{{ _ca_dirs['_ca_new_certs'].path }}/{{ item |splitext | first }}.{{ _ca_cert_ext }}"
   with_items: "{{ csr_list }}"
   when: (csr_list | length) > 0
+
+- name: read certificates for bundle files creation
+  command: awk 1 "{{ _ca_dirs['_ca_new_certs'].path }}/{{ item |splitext | first }}.{{ _ca_cert_ext }}" "{{ _ca_dirs['_ca_certs'].path }}/{{ _ca_cert_name }}"
+  register: ca_bundle
+  with_items: "{{ csr_list }}"
+
+- name: create bundle files
+  copy:
+    dest: "{{ _ca_dirs['_ca_new_certs'].path }}/bundle-{{ item.cmd[2] |basename }}"
+    content: "{{ item.stdout }}"
+    remote_src: true
+  with_items: "{{ ca_bundle.results }}"
 
 - name: Copy csrs to signed_csr
   copy:
