@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 # config used to sign intermediate ca certificates
 
-.include {{ _ca_dirs['_ca_cnf'].path }}/openssl-base.cnf
+.include {{ _ca_dirs._ca_cnf.path }}/openssl-base.cnf
 
 [ ca ]
 default_ca              = CA_default

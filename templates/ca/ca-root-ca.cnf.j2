@@ -1,6 +1,7 @@
 {{ ansible_managed | comment }}
 
-.include {{ _ca_dirs['_ca_cnf'].path }}/openssl-base.cnf
+.include {{ _ca_dirs._ca_cnf.path }}/openssl-base.cnf
+{% set template = ca_self_info %}
 
 [ ca ]
 
@@ -24,10 +25,9 @@ preserve                    = no
 
 [ req ]
 
-output_password             = "{{ ca_root_cert_info['password'] }}"
 encrypt_key                 = yes
-default_bits                = {{ ca_root_cert_info['default_bits'] }} 
-default_md                  = {{ ca_root_cert_info['default_md'] }}
+default_bits                = {{ template.default_bits }}
+default_md                  = {{ template.default_md }}
 default_keyfile             = $b_private_key
 prompt                      = no
 string_mask                 = utf8only
@@ -37,7 +37,7 @@ x509_extensions             = root_ca_ext
 
 
 [ root_ca_dn ]
-{% for key, value in ca_root_cert_info['dn'].items() %}
+{% for key, value in template.dn.items() %}
 {{ key }} = {{ value }}
 {% endfor %}
 

@@ -1,21 +1,14 @@
 ---
-- name: Assert groups
-  assert:
-    that: ( pki_root_group in group_names ) or ( pki_intermediate_group in group_names)
-    quiet: true
-
-- name: Assert groups
-  assert:
-    that: not (( pki_root_group in group_names ) and ( pki_intermediate_group in group_names))
-    quiet: true
-
-- name: Assert only one root
-  assert:
-    that: (groups[pki_root_group] | length) == 1
-    quiet: true
-
-- name: assert proper distribution
+- name: Assert proper distribution
   assert:
     that:
       - ansible_distribution in ['Ubuntu', 'Archlinux']
     quiet: true
+
+- name: Assert supported templates
+  assert:
+    that:
+      - item.key in  _pki_templates
+    quiet: true
+  loop: "{{ ca_templates | dict2items }}"
+  when: inventory_hostname in groups[pki_intermediate_group]

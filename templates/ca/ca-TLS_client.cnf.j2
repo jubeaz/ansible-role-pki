@@ -1,7 +1,7 @@
 {{ ansible_managed | comment }}
 
-.include {{ ca_base_dir }}/{{ ca_cnf_dir }}/openssl-base.cnf
-{% set template = ca_templates_params[ca_templates['TLS-client']] %}
+.include {{ _ca_dirs._ca_cnf.path }}/openssl-base.cnf
+{% set template = ca_templates_params[ca_templates.TLS_client] %}
 
 [ ca ]
 default_ca                  = CA_default
@@ -19,24 +19,24 @@ RANDFILE                    = $b_RANDFILE
 private_key                 = $b_private_key
 certificate                 = $b_certificate
 
-default_days                = {{ template['default_days'] }}
-default_md                  = {{ template['default_md'] }}
+default_days                = {{ template.default_days }}
+default_md                  = {{ template.default_md }}
 name_opt                    = multiline, -esc_msb, utf8
 cert_opt                    = ca_default
 email_in_dn                 = no
 policy                      = strict
 preserve                    = no
 copy_extensions             = copy
-x509_extensions             = v3_TSL_server
+x509_extensions             = v3_ext
 
 [ strict ]
 
 commonName                  = supplied
-{% for key, value in template['policy'].items() %}
+{% for key, value in template.policy.items() %}
 {{ key }} = {{ value }}
 {% endfor %}
 
-[ v3_TLS_server ]
+[ v3_ext ]
 
 subjectKeyIdentifier        = hash
 authorityKeyIdentifier      = keyid:always,issuer

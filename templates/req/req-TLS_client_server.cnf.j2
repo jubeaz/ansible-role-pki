@@ -1,6 +1,9 @@
 {{ ansible_managed | comment }}
 
-{% set template = ca_templates_params[ca_templates.identity] %}
+{% set template = ca_templates_params[ca_templates.TLS_client_server] %}
+
+[ default ]
+SAN                     = DNS:yourdomain.tld
 
 [ req ]
 default_keyfile         =
@@ -15,10 +18,8 @@ distinguished_name      = req_dn
 req_extensions          = req_reqext
 
 [ req_dn ]
-commonName              = "6. Common Name              (eg, full name)"
+commonName              = "6. Common Name              (eg, FQDN)"
 commonName_max          = 64
-emailAddress            = "7. Email Address            (eg, name@fqdn)"
-emailAddress_max        = 40
 
 [ req_reqext ]
-subjectAltName          = email:move
+subjectAltName          = $ENV::SAN

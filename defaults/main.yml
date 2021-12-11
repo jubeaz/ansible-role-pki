@@ -1,6 +1,11 @@
 ---
 # defaults file for pki
 
+# root-ca or intermediate-ca
+ca_type: root-ca
+# empty for root ca
+ca_signing_ca:
+
 ca_base_dir: /etc/ssl/ca
 ca_certs_dir: certs
 ca_cnf_dir: configs
@@ -16,8 +21,11 @@ ca_rejected_csr_dir: csr-rejected
 ca_crlnumber: "crlnumber"
 ca_serial: "serial"
 ca_database: "db"
+db_unique_subject: "yes"
+
 ca_file_basename: "ca-{{ ansible_hostname }}"
 ca_key_password: "test"
+
 ca_cps: "http://my.policy.uri"
 ca_cps_explicit: "some explicit test for policy"
 ca_cps_organization: "my org"
@@ -30,7 +38,9 @@ ca_templates: {
   TLS-client: default,
   TLS-client_server: default,
   identity: default,
-  encryption: default
+  encryption: default,
+  intermediate-ca: default,
+  root-ca: default
 }
 ca_templates_params: {
   default: {
@@ -42,7 +52,12 @@ ca_templates_params: {
     }
   }
 }
-ca_dn: {
-  CN: xxx,
-  OU=: yyy
+
+ca_self_info: {
+  duration: 7300,
+  default_bits: 4096,
+  default_md: sha256,
+  dn: {
+    CN: My CA,
+  }
 }

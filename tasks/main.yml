@@ -1,46 +1,45 @@
 ---
 # tasks file for pki
-- name: assert proper distribution
-  assert:
-    that:
-      - ansible_distribution in ['Ubuntu', 'Archlinux']
-    quiet: true
 
-- include_tasks: asserts.yml
-  when: inventory_hostname in groups[pki_group]
+- name: Include asserts
+  include_tasks: asserts.yml
 
-- include_tasks: asserts-root.yml
-  when: inventory_hostname in groups[pki_root_group]
+- name: Include asserts-root
+  include_tasks: asserts-root.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "root-ca")
 
-- include_tasks: set_vars.yml
-  when: inventory_hostname in groups[pki_group]
+- name: Include asserts-intermediate
+  include_tasks: asserts-intermediate.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "intermediate-ca")
 
-- include_tasks: asserts-intermediate.yml
-  when: inventory_hostname in groups[pki_intermediate_group]
+- name: Include ubuntu
+  include_tasks: ubuntu.yml
+  when: (ansible_distribution == "Ubuntu") and (inventory_hostname in groups[pki_group])
 
-    #- include_tasks: ubuntu.yml
-    # when: (ansible_distribution == "Ubuntu") and (inventory_hostname in groups[pki_group])
-
-- include_tasks: arch.yml
+- name: Include arch
+  include_tasks: arch.yml
   when: (ansible_distribution == "Archlinux") and (inventory_hostname in groups[pki_group])
 
-- include_tasks: create-structure.yml
+- name: Include create-structure
+  include_tasks: create-structure.yml
   when: inventory_hostname in groups[pki_group]
 
-- include_tasks: root-create-configs.yml
-  when: inventory_hostname in groups[pki_root_group]
+- name: Include create-config
+  include_tasks: create-configs.yml
+  when: inventory_hostname in groups[pki_group]
 
-- include_tasks: intermediate-create-configs.yml
-  when: inventory_hostname in groups[pki_intermediate_group]
+- name: Include root-create-cert
+  include_tasks: root-create-cert.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "root-ca")
 
-- include_tasks: root-create-cert.yml
-  when: inventory_hostname in groups[pki_root_group]
+- name: Include intermediate-create-csr
+  include_tasks: intermediate-create-csr.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "intermediate-ca")
 
-- include_tasks: intermediate-create-csr.yml
-  when: inventory_hostname in groups[pki_intermediate_group]
+- name: Include root-sign-csr
+  include_tasks: root-sign-csr.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "root-ca")
 
-- include_tasks: root-sign-csr.yml
-  when: inventory_hostname in groups[pki_root_group]
-
-- include_tasks: intermediate-get-cert.yml
-  when: inventory_hostname in groups[pki_intermediate_group]
+- name: Include intermediate-get-cert
+  include_tasks: intermediate-get-cert.yml
+  when: (inventory_hostname in groups[pki_group]) and (ca_type == "intermediate-ca") and not  __ca_cert_file.stat.exists

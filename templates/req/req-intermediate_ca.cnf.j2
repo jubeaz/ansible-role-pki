@@ -1,6 +1,7 @@
 {{ ansible_managed | comment }}
+.include {{ _ca_dirs._ca_cnf.path }}/openssl-base.cnf
+{% set template = ca_templates_params[ca_templates.intermediate_ca] %}
 
-{% set template = ca_templates_params[ca_templates.identity] %}
 
 [ req ]
 default_keyfile         =
@@ -14,11 +15,8 @@ prompt                  = yes
 distinguished_name      = req_dn
 req_extensions          = req_reqext
 
-[ req_dn ]
+[ client_dn ]
 commonName              = "6. Common Name              (eg, full name)"
 commonName_max          = 64
-emailAddress            = "7. Email Address            (eg, name@fqdn)"
-emailAddress_max        = 40
 
 [ req_reqext ]
-subjectAltName          = email:move

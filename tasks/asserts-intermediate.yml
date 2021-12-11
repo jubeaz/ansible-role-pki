@@ -1,8 +1,9 @@
 ---
-- name: Assert supported templates
+- name: Assert ca_signing_ca is defined and sety
   assert:
     that:
-      - item.key in  _pki_templates
+      - ca_signing_ca is defined
+      - ca_signing_ca is string
     quiet: true
-  with_dict: "{{ ca_templates }}"
-  when: inventory_hostname in groups[pki_intermediate_group]
+
+      # TO DO control is inventory hostname and is CA

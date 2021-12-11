@@ -1,7 +1,9 @@
 {{ ansible_managed | comment }}
 # config used to sign intermediate ca certificates
 
-.include {{ _ca_dirs['_ca_cnf'].path }}/openssl-base.cnf
+.include {{ _ca_dirs._ca_cnf.path }}/openssl-base.cnf
+{% set template = ca_templates_params[ca_templates.intermediate_ca] %}
+
 
 [ ca ]
 default_ca              = CA_default
@@ -19,25 +21,25 @@ RANDFILE                = $b_RANDFILE
 private_key             = $b_private_key
 certificate             = $b_certificate
 
-default_md              = {{ ca_intermediate_info['default_md'] }}
+default_days            = {{ template.default_days }}
+default_md              = {{ template.default_md }}
 name_opt                = multiline, -esc_msb, utf8
 cert_opt                = ca_default
-default_days            = {{ ca_intermediate_info['default_days'] }}
 email_in_dn             = no
 policy                  = strict
 preserve                = no
 unique_subject          = no
 copy_extensions         = copy
-x509_extensions         = v3_intermediate_ca
+x509_extensions         = v3_ext
 
 [ strict ]
 
 commonName              = supplied
-{% for key, value in ca_intermediate_info['policy'].items() %}
+{% for key, value in template.policy.items() %}
 {{ key }} = {{ value }}
 {% endfor %}
 
-[ v3_intermediate_ca ]
+[ v3_ext ]
 
 subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid:always,issuer
