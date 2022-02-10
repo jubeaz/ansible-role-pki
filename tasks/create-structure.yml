@@ -8,6 +8,14 @@
     state: directory
   with_dict: "{{ _ca_dirs }}"
 
+- name: Create csr_template directories
+  file:
+    path: "{{ ca_base_dir }}/{{ ca_csr_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0777
+    state: directory
+  loop: "{{ ca_templates.keys() }}"
 
 - name: Check ca_database
   stat:
